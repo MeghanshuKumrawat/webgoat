@@ -21,8 +21,8 @@ import static org.owasp.webgoat.plugin.SolutionConstants.PASSWORD_TOM;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * @author nbaars
- * @since 4/8/17.
+ * Author: nbaars
+ * Since: 4/8/17.
  */
 @AssignmentPath("/challenge/6")
 @Slf4j
@@ -47,9 +47,10 @@ public class Assignment6 extends AssignmentEndpoint {
             Connection connection = DatabaseUtilities.getConnection(webSession);
             checkDatabase(connection);
 
-            String checkUserQuery = "select userid from " + USERS_TABLE_NAME + " where userid = '" + username_reg + "'";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(checkUserQuery);
+            String checkUserQuery = "select userid from " + USERS_TABLE_NAME + " where userid = ?";
+            PreparedStatement statement = connection.prepareStatement(checkUserQuery);
+            statement.setString(1, username_reg);
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 attackResult = failed().feedback("user.exists").feedbackArgs(username_reg).build();
@@ -134,4 +135,3 @@ public class Assignment6 extends AssignmentEndpoint {
     }
 
 }
-
