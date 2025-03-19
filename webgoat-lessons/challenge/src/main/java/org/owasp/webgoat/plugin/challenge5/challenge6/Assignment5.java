@@ -47,16 +47,15 @@ public class Assignment5 extends AssignmentEndpoint {
         }
 
         String query = "SELECT password FROM " + USERS_TABLE_NAME + " WHERE userid = ? AND password = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, username_login);
-            statement.setString(2, password_login);
-            ResultSet resultSet = statement.executeQuery();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, username_login);
+        statement.setString(2, password_login);
+        ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
-                return success().feedback("challenge.solved").feedbackArgs(Flag.FLAGS.get(5)).build();
-            } else {
-                return failed().feedback("challenge.close").build();
-            }
+        if (resultSet.next()) {
+            return success().feedback("challenge.solved").feedbackArgs(Flag.FLAGS.get(5)).build();
+        } else {
+            return failed().feedback("challenge.close").build();
         }
     }
 
