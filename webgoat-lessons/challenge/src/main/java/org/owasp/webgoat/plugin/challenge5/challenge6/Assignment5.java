@@ -20,8 +20,8 @@ import static org.owasp.webgoat.plugin.SolutionConstants.PASSWORD_TOM;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
- * @author nbaars
- * @since 4/8/17.
+ * Author: nbaars
+ * Since: 4/8/17.
  */
 @AssignmentPath("/challenge/5")
 @Slf4j
@@ -46,20 +46,24 @@ public class Assignment5 extends AssignmentEndpoint {
             return failed().feedback("user.not.larry").feedbackArgs(username_login).build();
         }
 
-        PreparedStatement statement = connection.prepareStatement("select password from " + USERS_TABLE_NAME + " where userid = '" + username_login + "' and password = '" + password_login + "'");
-        ResultSet resultSet = statement.executeQuery();
+        String query = "SELECT password FROM " + USERS_TABLE_NAME + " WHERE userid = ? AND password = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username_login);
+            statement.setString(2, password_login);
+            ResultSet resultSet = statement.executeQuery();
 
-        if (resultSet.next()) {
-            return success().feedback("challenge.solved").feedbackArgs(Flag.FLAGS.get(5)).build();
-        } else {
-            return failed().feedback("challenge.close").build();
+            if (resultSet.next()) {
+                return success().feedback("challenge.solved").feedbackArgs(Flag.FLAGS.get(5)).build();
+            } else {
+                return failed().feedback("challenge.close").build();
+            }
         }
     }
 
     private void checkDatabase(Connection connection) throws SQLException {
         try {
             Statement statement = connection.createStatement();
-            statement.execute("select 1 from " + USERS_TABLE_NAME);
+            statement.execute("SELECT 1 FROM " + USERS_TABLE_NAME);
         } catch (SQLException e) {
             createChallengeTable(connection);
         }
@@ -97,4 +101,3 @@ public class Assignment5 extends AssignmentEndpoint {
     }
 
 }
-
