@@ -54,8 +54,16 @@ public class VulnerableComponentsLesson extends AssignmentEndpoint {
 
 		
         XStream xstream = new XStream(new DomDriver());
+        
+        // Initialize security framework to prevent remote code execution vulnerability
+        xstream.allowTypesByWildcard(new String[] {
+            "org.owasp.webgoat.plugin.*"
+        });
+        
+        // Only allow specifically the Contact class
+        xstream.allowTypes(new Class[] {Contact.class});
+        
         xstream.setClassLoader(Contact.class.getClassLoader());
-
         xstream.processAnnotations(Contact.class);
 //        xstream.registerConverter(new ContactConverter());
 //        xstream.registerConverter(new CatchAllConverter(), XStream.PRIORITY_VERY_LOW);
