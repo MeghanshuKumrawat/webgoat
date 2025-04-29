@@ -47,14 +47,14 @@ public class Assignment6 extends AssignmentEndpoint {
             Connection connection = DatabaseUtilities.getConnection(webSession);
             checkDatabase(connection);
 
-            String checkUserQuery = "select userid from " + USERS_TABLE_NAME + " where userid = '" + username_reg + "'";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(checkUserQuery);
+            PreparedStatement preparedStatement = connection.prepareStatement("select userid from " + USERS_TABLE_NAME + " where userid = ?");
+            preparedStatement.setString(1, username_reg);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 attackResult = failed().feedback("user.exists").feedbackArgs(username_reg).build();
             } else {
-                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + USERS_TABLE_NAME + " VALUES (?, ?, ?)");
+                preparedStatement = connection.prepareStatement("INSERT INTO " + USERS_TABLE_NAME + " VALUES (?, ?, ?)");
                 preparedStatement.setString(1, username_reg);
                 preparedStatement.setString(2, email_reg);
                 preparedStatement.setString(3, password_reg);
