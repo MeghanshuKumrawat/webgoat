@@ -98,6 +98,5 @@ public class Assignment5 extends AssignmentEndpoint {
             log.error("Unable create table", e);
         }
     }
-
 }
 EOF < /dev/null
