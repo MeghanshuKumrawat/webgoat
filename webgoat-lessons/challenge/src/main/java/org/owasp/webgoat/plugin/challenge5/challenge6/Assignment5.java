@@ -39,14 +39,17 @@ public class Assignment5 extends AssignmentEndpoint {
         Connection connection = DatabaseUtilities.getConnection(webSession);
         checkDatabase(connection);
 
-        if (!StringUtils.hasText(username_login) || !StringUtils.hasText(password_login)) {
+        if (\!StringUtils.hasText(username_login) || \!StringUtils.hasText(password_login)) {
             return failed().feedback("required4").build();
         }
-        if (!"Larry".equals(username_login)) {
+        if (\!"Larry".equals(username_login)) {
             return failed().feedback("user.not.larry").feedbackArgs(username_login).build();
         }
 
-        PreparedStatement statement = connection.prepareStatement("select password from " + USERS_TABLE_NAME + " where userid = '" + username_login + "' and password = '" + password_login + "'");
+        // Fix SQL injection by using parameterized queries properly
+        PreparedStatement statement = connection.prepareStatement("select password from " + USERS_TABLE_NAME + " where userid = ? and password = ?");
+        statement.setString(1, username_login);
+        statement.setString(2, password_login);
         ResultSet resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
@@ -95,6 +98,4 @@ public class Assignment5 extends AssignmentEndpoint {
             log.error("Unable create table", e);
         }
     }
-
 }
-
