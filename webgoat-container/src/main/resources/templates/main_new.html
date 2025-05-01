@@ -37,6 +37,8 @@
 
     <!-- Require.js used to load js asynchronously -->
     <script src="js/libs/require.min.js" data-main="js/main.js"/>
+    <!-- Use jQuery 3.6.0 from WebJars to fix CVE-2016-10707 -->
+    <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
     <meta http-equiv="Content-Type" content="text/id; charset=ISO-8859-1"/>
     <title>WebGoat</title>
 </head>

@@ -13,7 +13,8 @@ js/main.js << main file for require.js
 require.config({
   baseUrl: "js/",
   paths: {
-    jquery: 'libs/jquery-2.2.4.min',
+    // Updated to use jQuery 3.6.0 from WebJars to fix CVE-2016-10707
+    jquery: '/webjars/jquery/3.6.0/jquery.min',
     jqueryui: 'libs/jquery-ui-1.10.4',
     underscore: 'libs/underscore-min',
     backbone: 'libs/backbone-min',
@@ -23,8 +24,9 @@ require.config({
   },
 
   map: {
-    'libs/jquery-base' : {'jquery':'libs/jquery-2.2.4.min'},
-    'libs/jquery-vuln' : {'jquery':'libs/jquery-2.1.4.min'}
+    // Updated maps to use jQuery 3.6.0 from WebJars
+    'libs/jquery-base' : {'jquery':'/webjars/jquery/3.6.0/jquery.min'},
+    'libs/jquery-vuln' : {'jquery':'/webjars/jquery/3.6.0/jquery.min'}
   },
 
   shim: {
@@ -42,6 +44,7 @@ require.config({
   }
 });
 
-require(['jquery','libs/jquery-base','libs/jquery-vuln','jqueryui', 'underscore','backbone','goatApp/goatApp'], function($,jqueryBase,jqueryVuln,jqueryui,_,Backbone,Goat){
+// Use jQuery 3.6.0 instead of vulnerable versions to fix CVE-2016-10707
+require(['jquery','jqueryui', 'underscore','backbone','goatApp/goatApp'], function($,jqueryui,_,Backbone,Goat){
     Goat.initApp();
 });
