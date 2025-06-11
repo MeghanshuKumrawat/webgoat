@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -58,13 +59,15 @@ public class CrossSiteScriptingLesson5a extends AssignmentEndpoint {
 												@RequestParam Integer QTY4, @RequestParam String field1,
 												@RequestParam Integer field2, HttpServletRequest request)
 			throws IOException {
+		// Store original input for XSS detection (for this lesson)
+		String rawField1 = field1;
 
 		double totalSale = QTY1.intValue() * 69.99 + QTY2.intValue() * 27.99 + QTY3.intValue() * 1599.99 + QTY4.intValue() * 299.99;
 
 		userSessionData.setValue("xss-reflected1-complete",(Object)"false");
 		StringBuffer cart = new StringBuffer();
 		cart.append("Thank you for shopping at WebGoat. <br />You're support is appreciated<hr />");
-		cart.append("<p>We have charged credit card:" + field1 + "<br />");
+		cart.append("<p>We have charged credit card:" + HtmlUtils.htmlEscape(field1) + "<br />");
 		cart.append(   "                             ------------------- <br />");
 		cart.append(   "                               $" + totalSale);
 
@@ -73,7 +76,10 @@ public class CrossSiteScriptingLesson5a extends AssignmentEndpoint {
 			userSessionData.setValue("xss-reflected1-complete",(Object)"false");
 		}
 
-		if (field1.toLowerCase().contains("<script>alert('my javascript here')</script>")) {
+		// Since this is a training app, we need to check for the XSS attempt
+		// In a real application, you would never do this check and would always escape input
+		
+		if (rawField1.toLowerCase().contains("<script>alert('my javascript here')</script>")) {
 			//return trackProgress()
 			userSessionData.setValue("xss-reflected-5a-complete","true");
 			return trackProgress(success()
