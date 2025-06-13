@@ -15,5 +15,13 @@
     <property name="logback.disableObjectInputStreamUsage" value="true"/>
     <property name="logback.receivers.allowed" value="none"/>
 
-    <root level="INFO"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.boot.devtools" level="WARN"/>
+    <logger name="org.owasp" level="DEBUG"/>
+    <logger name="org.owasp.webgoat" level="TRACE"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
 </configuration>
