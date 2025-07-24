@@ -164,6 +164,9 @@
         <tomcat7-maven-plugin.version>2.3-SNAPSHOT</tomcat7-maven-plugin.version>
         <versioneye-maven-plugin.version>3.5.1</versioneye-maven-plugin.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
+        
+        <!-- Security fix for CVE-2023-6378: Override logback version to fix serialization vulnerability -->
+        <logback.version>1.2.13</logback.version>
     </properties>
 
     <modules>
